@@ -344,6 +344,8 @@ function! s:Interpreter()
         let interpreter = "pwsh"
     elseif &filetype ==# "javascript"
         let interpreter = "node"
+    elseif &filetype ==# "julia"
+        let interpreter = "julia"
     else
         let interpreter = "bash --norc"
     endif
