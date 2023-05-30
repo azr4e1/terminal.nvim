@@ -346,6 +346,8 @@ function! s:Interpreter()
         let interpreter = "node"
     elseif &filetype ==# "julia"
         let interpreter = "julia"
+    elseif &filetype ==# "haskell"
+        let interpreter = "ghci"
     else
         let interpreter = "bash --norc"
     endif
