@@ -81,7 +81,7 @@ endfunction
 function! s:HorTerm(cmd)
     " if terminal does not exist, create it, with specified proportions
     if t:term_buf ==# -1
-        exec float2nr(nvim_list_uis()[0].height*g:window_ratio_hor).'new | call termopen("' . a:cmd . '")'
+        exec float2nr(winheight(0)*g:window_ratio_hor).'new | call termopen("' . a:cmd . '")'
         " determine terminal id and buffer
         let t:term_id = b:terminal_job_id
         let t:term_buf = bufnr()
@@ -95,7 +95,7 @@ function! s:HorTerm(cmd)
         exec "wincmd p | stopinsert"
     else
         " if it exists, open current iteration
-        exec 'sbuffer +resize'.float2nr(nvim_list_uis()[0].height*g:window_ratio_hor).' '.t:term_buf
+        exec 'sbuffer +resize'.float2nr(winheight(0)*g:window_ratio_hor).' '.t:term_buf
         " fix terminal height
         setlocal winfixheight
         setlocal nocursorline
@@ -108,7 +108,7 @@ endfunction
 " same, but vertical
 function! s:VertTerm(cmd)
     if t:term_buf ==# -1
-        exec float2nr(nvim_list_uis()[0].width*g:window_ratio_vert)."vnew \| call termopen(\"" . a:cmd . "\")"
+        exec float2nr(winwidth(0)*g:window_ratio_vert)."vnew \| call termopen(\"" . a:cmd . "\")"
         let t:term_id = b:terminal_job_id
         let t:term_buf = bufnr()
         tnoremap <buffer><silent> <ESC> <C-\><C-n>
@@ -119,7 +119,7 @@ function! s:VertTerm(cmd)
         " jump to original window
         exec "wincmd p | stopinsert"
     else
-        exec 'vert sbuffer '.t:term_buf.' | vertical resize'.float2nr(nvim_list_uis()[0].width*g:window_ratio_vert)
+        exec 'vert sbuffer '.t:term_buf.' | vertical resize'.float2nr(winwidth(0)*g:window_ratio_vert)
         " fix terminal width
         setlocal winfixwidth
         setlocal nocursorline
@@ -156,7 +156,7 @@ function! CreateTermDynamic(cmd)
     endif
 
     " else create it
-    if nvim_list_uis()[0].width >= g:switch_to_horizontal
+    if winwidth(0) >= g:switch_to_horizontal
         call <SID>VertTerm(a:cmd)
     else
         call <SID>HorTerm(a:cmd)
@@ -183,8 +183,8 @@ function! ToggleTerm()
     else
         let win_numb = bufwinnr(t:term_buf)
         if win_numb ==# -1
-            if nvim_list_uis()[0].width >= g:switch_to_horizontal
-                exec 'vert sbuffer '.t:term_buf.' | vertical resize'.float2nr(nvim_list_uis()[0].width*g:window_ratio_vert)
+            if winwidth(0) >= g:switch_to_horizontal
+                exec 'vert sbuffer '.t:term_buf.' | vertical resize'.float2nr(winwidth(0)*g:window_ratio_vert)
                 " fix terminal width
                 setlocal winfixwidth
                 setlocal nocursorline
@@ -192,7 +192,7 @@ function! ToggleTerm()
                 " jump to original window
                 exec "wincmd p | stopinsert"
             else
-                exec 'sbuffer +resize'.float2nr(nvim_list_uis()[0].height*g:window_ratio_hor).' '.t:term_buf
+                exec 'sbuffer +resize'.float2nr(winheight(0)*g:window_ratio_hor).' '.t:term_buf
                 " fix terminal height
                 setlocal winfixheight
                 setlocal nocursorline
